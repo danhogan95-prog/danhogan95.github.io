@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dan Hogan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #181818;
+      --border: #2a2a2a;
+      --text: #e8e4dc;
+      --muted: #7a7570;
+      --accent: #c8a96e;
+      --accent-dim: rgba(200, 169, 110, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 5rem 0 3rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      line-height: 1.0;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .tagline {
+      margin-top: 1.4rem;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 420px;
+      line-height: 1.7;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    /* ── Links section ── */
+    .links-section {
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .links-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.1rem 1.4rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .link-card:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      transform: translateX(4px);
+    }
+
+    .link-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .link-icon {
+      font-size: 1.3rem;
+      width: 2rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .link-info { flex: 1; }
+
+    .link-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .link-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .link-arrow {
+      color: var(--muted);
+      font-size: 1rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .link-card:hover .link-arrow {
+      color: var(--accent);
+      transform: translateX(3px);
+    }
+
+    /* ── Video section ── */
+    .video-section {
+      margin-top: 3.5rem;
+      animation: fadeUp 0.8s 0.35s ease both;
+    }
+
+    .video-wrapper {
+      margin-top: 1.2rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: none;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 4rem;
+      padding-bottom: 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+
+    /* ── Animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 500px) {
+      header { padding: 3.5rem 0 2rem; }
+      .link-desc { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <p class="eyebrow">Welcome</p>
+      <h1>Dan <em>Hogan</em></h1>
+      <p class="tagline">Writer, fitness enthusiast, photographer, and creator. Here's where everything lives.</p>
+    </header>
+
+    <hr class="divider">
+
+    <section class="links-section">
+      <p class="section-label">Explore</p>
+      <div class="links-grid">
+
+        <a class="link-card" href="https://personalblog.danhogan95.com/" target="_blank" rel="noopener">
+          <span class="link-icon">✍️</span>
+          <div class="link-info">
+            <div class="link-title">Personal Blog</div>
+            <div class="link-desc">Thoughts, stories, and whatever's on my mind</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a class="link-card" href="http://fitnessblog.danhogan95.com/" target="_blank" rel="noopener">
+          <span class="link-icon">💪</span>
+          <div class="link-info">
+            <div class="link-title">Fitness Blog</div>
+            <div class="link-desc">Training, health, and everything in between</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a class="link-card" href="http://fitnesstumblr.danhogan95.com/" target="_blank" rel="noopener">
+          <span class="link-icon">🔁</span>
+          <div class="link-info">
+            <div class="link-title">Fitness Tumblr</div>
+            <div class="link-desc">Quick hits, reblogs, and fitness inspiration</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a class="link-card" href="https://www.flickr.com/photos/danhogan95/" target="_blank" rel="noopener">
+          <span class="link-icon">📷</span>
+          <div class="link-info">
+            <div class="link-title">Photography on Flickr</div>
+            <div class="link-desc">Full photo archive and collections</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a class="link-card" href="https://photography.danhogan95.com/" target="_blank" rel="noopener">
+          <span class="link-icon">🖼️</span>
+          <div class="link-info">
+            <div class="link-title">Photography Portfolio</div>
+            <div class="link-desc">Curated portfolio of my best work</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <a class="link-card" href="https://www.youtube.com/channel/UCigULfPav7ELigs9R4Rgd5g" target="_blank" rel="noopener">
+          <span class="link-icon">▶️</span>
+          <div class="link-info">
+            <div class="link-title">YouTube Channel</div>
+            <div class="link-desc">Videos, vlogs, and visual storytelling</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="video-section">
+      <p class="section-label">Featured Video</p>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/GvU4GlJTN5w"
+          title="Featured YouTube video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 Dan Hogan &nbsp;·&nbsp; danhogan95.com</p>
+    </footer>
+
+  </div>
+</body>
+</html>
